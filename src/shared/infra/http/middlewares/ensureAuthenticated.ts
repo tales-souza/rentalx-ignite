@@ -2,6 +2,7 @@ import { NextFunction, Request, Response } from "express";
 import { verify } from "jsonwebtoken";
 
 import { UsersRepository } from "../../../../modules/accounts/infra/typeorm/repositories/UsersRepository";
+import { AppError } from "../../../errors/AppError";
 
 export async function ensureAuthenticated(
   request: Request,
@@ -11,7 +12,7 @@ export async function ensureAuthenticated(
   const authHeader = request.headers.authorization;
 
   if (!authHeader) {
-    throw new Error("Token missing");
+    throw new AppError("Token missing");
   }
 
   const [, token] = authHeader.split(" ");
@@ -24,7 +25,7 @@ export async function ensureAuthenticated(
     const user = await userRepository.findById(String(user_id));
 
     if (!user) {
-      throw new Error("User does not exists!");
+      throw new AppError("User does not exists!");
     }
 
     request.user = {
@@ -33,6 +34,6 @@ export async function ensureAuthenticated(
 
     next();
   } catch (error) {
-    throw new Error("Invalid Token");
+    throw new AppError("Invalid Token");
   }
 }
