@@ -9,7 +9,7 @@ import { AppError } from "../../errors/AppError";
 import createConnection from "../typeorm";
 import { router } from "./routes";
 
-createConnection();
+createConnection("localhost");
 const app = express();
 
 app.use(express.json());
