@@ -28,6 +28,10 @@ class DayJsDateProvider implements IDateProvider {
     const compare = dayjs(end_date_utc).diff(start_date_utc, "days");
     return compare;
   }
+
+  addDays(days: number): Date {
+    return dayjs().add(days, "days").toDate();
+  }
 }
 
 export { DayJsDateProvider };
