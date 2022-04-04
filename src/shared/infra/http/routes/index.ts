@@ -2,6 +2,7 @@ import { Router } from "express";
 
 import { carsRoutes } from "./cars.routes";
 import { categoriesRoutes } from "./categories.routes";
+import { passwordRoutes } from "./password.routes";
 import { rentalRoutes } from "./rentals.routes";
 import { sessionRoutes } from "./session.routes";
 import { specificationsRoutes } from "./specifications.routes";
@@ -15,5 +16,6 @@ router.use("/users", usersRoutes);
 router.use("/", sessionRoutes);
 router.use("/cars", carsRoutes);
 router.use("/rentals", rentalRoutes);
+router.use("/password", passwordRoutes);
 
 export { router };
