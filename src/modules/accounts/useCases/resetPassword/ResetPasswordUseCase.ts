@@ -3,6 +3,7 @@ import { inject, injectable } from "tsyringe";
 
 import { IDateProvider } from "../../../../shared/container/providers/DateProvider/IDateProvider";
 import { AppError } from "../../../../shared/errors/AppError";
+import { passwordComplexFnc } from "../../../../utils/passwordComplexFnc";
 import { IUsersRepository } from "../../repositories/IUsersRepository";
 import { IUsersTokensRepository } from "../../repositories/IUsersTokensRepository";
 
@@ -25,6 +26,12 @@ class ResetPasswordUseCase {
   ) {}
 
   async execute({ password, token }: IRequest): Promise<void> {
+    const passwordComplex = await passwordComplexFnc(password);
+
+    if (passwordComplex) {
+      throw new AppError(passwordComplex);
+    }
+
     const userToken = await this.usersTokensRepository.findByRefreshToken(
       token
     );
