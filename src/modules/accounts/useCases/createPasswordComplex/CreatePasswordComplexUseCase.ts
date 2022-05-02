@@ -5,7 +5,7 @@ import { PasswordComplex } from "../../infra/typeorm/entities/PasswordComplex";
 import { IPasswordComplexRepository } from "../../repositories/IPasswordComplexRespository";
 
 @injectable()
-class PasswordComplexUseCase {
+class CreatePasswordComplexUseCase {
   constructor(
     @inject("PasswordComplexRepository")
     private iPasswordComplexRepository: IPasswordComplexRepository
@@ -30,4 +30,4 @@ class PasswordComplexUseCase {
   }
 }
 
-export { PasswordComplexUseCase };
+export { CreatePasswordComplexUseCase };
