@@ -1,6 +1,7 @@
 import { DayJsDateProvider } from "../../../../shared/container/providers/DateProvider/implementations/DayJsDateProvider";
 import { AppError } from "../../../../shared/errors/AppError";
 import { ICreateUserDTO } from "../../dtos/ICreateUserDTO";
+import { PasswordComplexInMemory } from "../../repositories/in-memory/PasswordComplexInMemory";
 import { UsersRepositoryInMemory } from "../../repositories/in-memory/UsersRepositoryInMemory";
 import { UsersTokensRepositoryInMemory } from "../../repositories/in-memory/UsersTokensRepositoryInMemory";
 import { CreateUserUseCase } from "../createUser/CreateUserUseCase";
@@ -8,13 +9,14 @@ import { AuthenticateUserUseCase } from "./AuthenticateUserUseCase";
 
 let usersRepositoryInMemory: UsersRepositoryInMemory;
 let usersTokensRepositoryInMemory: UsersTokensRepositoryInMemory;
+let passwordComplexRepository: PasswordComplexInMemory;
 
 let authenticateUserUseCase: AuthenticateUserUseCase;
 let createUserUseCase: CreateUserUseCase;
 let dateProvider: DayJsDateProvider;
 
 describe("Authenticate User", () => {
-  beforeEach(() => {
+  beforeEach(async () => {
     usersRepositoryInMemory = new UsersRepositoryInMemory();
     usersTokensRepositoryInMemory = new UsersTokensRepositoryInMemory();
     dateProvider = new DayJsDateProvider();
@@ -24,7 +26,20 @@ describe("Authenticate User", () => {
       usersTokensRepositoryInMemory,
       dateProvider
     );
-    createUserUseCase = new CreateUserUseCase(usersRepositoryInMemory);
+    passwordComplexRepository = new PasswordComplexInMemory();
+
+    await passwordComplexRepository.create({
+      qtt_characters: 0,
+      qtt_lowercase_characters: 0,
+      qtt_numeral_characters: 0,
+      qtt_special_characters: 0,
+      qtt_uppercase_characters: 0,
+    });
+
+    createUserUseCase = new CreateUserUseCase(
+      usersRepositoryInMemory,
+      passwordComplexRepository
+    );
   });
 
   it("should be able to authenticate an user", async () => {

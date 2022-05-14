@@ -1,8 +1,9 @@
-import { PasswordComplexRepository } from "../modules/accounts/infra/typeorm/repositories/PasswordComplexRepository";
+import { IPasswordComplexRepository } from "../modules/accounts/repositories/IPasswordComplexRespository";
 
-export const passwordComplexFnc = async (password: string) => {
-  const passwordComplexRepository = new PasswordComplexRepository();
-
+export const passwordComplexFnc = async (
+  passwordComplexRepository: IPasswordComplexRepository,
+  password: string
+) => {
   const passwordComplex = await passwordComplexRepository.getOne();
 
   if (!passwordComplex) {

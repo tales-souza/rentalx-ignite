@@ -4,6 +4,7 @@ import { inject, injectable } from "tsyringe";
 import { IDateProvider } from "../../../../shared/container/providers/DateProvider/IDateProvider";
 import { AppError } from "../../../../shared/errors/AppError";
 import { passwordComplexFnc } from "../../../../utils/passwordComplexFnc";
+import { IPasswordComplexRepository } from "../../repositories/IPasswordComplexRespository";
 import { IUsersRepository } from "../../repositories/IUsersRepository";
 import { IUsersTokensRepository } from "../../repositories/IUsersTokensRepository";
 
@@ -22,11 +23,17 @@ class ResetPasswordUseCase {
     private dateProvider: IDateProvider,
 
     @inject("UsersRepository")
-    private usersRepository: IUsersRepository
+    private usersRepository: IUsersRepository,
+
+    @inject("PasswordComplexRepository")
+    private passwordComplexRepository: IPasswordComplexRepository
   ) {}
 
   async execute({ password, token }: IRequest): Promise<void> {
-    const passwordComplex = await passwordComplexFnc(password);
+    const passwordComplex = await passwordComplexFnc(
+      this.passwordComplexRepository,
+      password
+    );
 
     if (passwordComplex) {
       throw new AppError(passwordComplex);
@@ -35,8 +42,6 @@ class ResetPasswordUseCase {
     const userToken = await this.usersTokensRepository.findByRefreshToken(
       token
     );
-
-    console.log(token);
 
     if (!userToken) {
       throw new AppError("Inválid Token!");

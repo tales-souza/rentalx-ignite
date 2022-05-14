@@ -1,7 +1,6 @@
 import { container } from "tsyringe";
 
 import "./providers";
-import { PasswordComplex } from "../../modules/accounts/infra/typeorm/entities/PasswordComplex";
 import { PasswordComplexRepository } from "../../modules/accounts/infra/typeorm/repositories/PasswordComplexRepository";
 import { UsersRepository } from "../../modules/accounts/infra/typeorm/repositories/UsersRepository";
 import { UsersTokensRepository } from "../../modules/accounts/infra/typeorm/repositories/UsersTokensRepository";
@@ -16,6 +15,8 @@ import { ICarsImageRepository } from "../../modules/cars/repositories/ICarsImage
 import { ICarsRepository } from "../../modules/cars/repositories/ICarsRepository";
 import { ICategoriesRepository } from "../../modules/cars/repositories/ICategoriesRepository";
 import { ISpecificationsRepository } from "../../modules/cars/repositories/ISpecificationsRepository";
+import { FeedbackRepository } from "../../modules/feedback/infra/typeorm/repositories/FeedbackRepository";
+import { IFeedbackRepository } from "../../modules/feedback/repositories/IFeedbackRepository";
 import { RentalsRepository } from "../../modules/rentals/infra/typeorm/repositories/RentalsRepository";
 import { IRentalsRepository } from "../../modules/rentals/repositories/IRentalsRepository";
 
@@ -55,4 +56,9 @@ container.registerSingleton<IUsersTokensRepository>(
 container.registerSingleton<IPasswordComplexRepository>(
   "PasswordComplexRepository",
   PasswordComplexRepository
+);
+
+container.registerSingleton<IFeedbackRepository>(
+  "FeedbackRepository",
+  FeedbackRepository
 );

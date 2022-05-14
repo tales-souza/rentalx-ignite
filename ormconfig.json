@@ -5,7 +5,7 @@
   "username":"docker",
   "password":"ignite",
   "database":"rentx",
-  "entities": ["src/modules/accounts/infra/typeorm/entities/*.ts", "src/modules/cars/infra/typeorm/entities/*.ts", "src/modules/rentals/infra/typeorm/entities/*.ts"], 
+  "entities": ["src/modules/accounts/infra/typeorm/entities/*.ts", "src/modules/cars/infra/typeorm/entities/*.ts", "src/modules/rentals/infra/typeorm/entities/*.ts", "src/modules/feedback/infra/typeorm/entities/*.ts"], 
 
 
   "migrations": ["./src/shared/infra/typeorm/migrations/*.ts"],
