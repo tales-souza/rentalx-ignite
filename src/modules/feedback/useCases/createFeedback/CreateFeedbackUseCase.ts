@@ -1,9 +1,9 @@
 import { resolve } from "path";
 import { inject, injectable } from "tsyringe";
 
-import { IMailProvider } from "../../../shared/container/providers/MailProvider/IMailProvider";
-import { Feedback } from "../infra/typeorm/entities/Feedback";
-import { IFeedbackRepository } from "../repositories/IFeedbackRepository";
+import { IMailProvider } from "../../../../shared/container/providers/MailProvider/IMailProvider";
+import { Feedback } from "../../infra/typeorm/entities/Feedback";
+import { IFeedbackRepository } from "../../repositories/IFeedbackRepository";
 
 interface IRequest {
   id?: string;
@@ -31,6 +31,7 @@ class CreateFeedbackUseCase {
 
     const templatePath2 = resolve(
       __dirname,
+      "..",
       "..",
       "views",
       "emails",

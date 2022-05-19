@@ -27,7 +27,10 @@
 
     <span> {{body}} </span>
 
-    <img src={{screenshot}} />  
+
+    {{#if screenshot}}
+       <img src={{screenshot}} />
+    {{/if}}
 
     <strong>Obrigado!</strong>
 

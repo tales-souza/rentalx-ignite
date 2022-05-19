@@ -1,6 +1,6 @@
 import { Router } from "express";
 
-import { CreateFeedbackController } from "../../../../modules/feedback/useCases/CreateFeedbackController";
+import { CreateFeedbackController } from "../../../../modules/feedback/useCases/createFeedback/CreateFeedbackController";
 
 const feedbackRoutes = Router();
 

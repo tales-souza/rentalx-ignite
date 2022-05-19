@@ -1,6 +1,7 @@
 import express, { NextFunction, Request, Response } from "express";
 import "express-async-errors";
 import swaggerUi from "swagger-ui-express";
+import cors from "cors";
 
 import "dotenv/config";
 import "reflect-metadata";
@@ -14,6 +15,7 @@ import upload from "../../../config/upload";
 createConnection("localhost");
 const app = express();
 
+app.use(cors());
 app.use(express.json());
 
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerFile));
