@@ -18,7 +18,7 @@ class CreateFeedbackUseCase {
     @inject("FeedbackRepository")
     private feedbackRepository: IFeedbackRepository,
 
-    @inject("EtherealMailProvider")
+    @inject("MailProvider")
     private mailProvider: IMailProvider
   ) {}
 
@@ -46,7 +46,7 @@ class CreateFeedbackUseCase {
 
     await this.mailProvider.sendMail(
       "tales.monteiro@hotmail.com",
-      "Você recebeu um feedback de um usuário",
+      "Você recebeu feedback de um usuário",
       variables,
       templatePath2
     );

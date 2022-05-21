@@ -1,3 +1,4 @@
+import { SES } from "aws-sdk";
 import fs from "fs";
 import handlebars from "handlebars";
 import nodemailer, { Transporter } from "nodemailer";
@@ -6,29 +7,16 @@ import { injectable } from "tsyringe";
 import { IMailProvider } from "../IMailProvider";
 
 @injectable()
-class EtherealMailProvider implements IMailProvider {
+class SESMailProvider implements IMailProvider {
   private client: Transporter;
 
   constructor() {
-    nodemailer
-      .createTestAccount()
-      .then((account) => {
-        const transporter = nodemailer.createTransport({
-          host: account.smtp.host,
-          port: account.smtp.port,
-          secure: account.smtp.secure,
-          auth: {
-            user: account.user,
-            pass: account.pass,
-          },
-          tls: {
-            rejectUnauthorized: false,
-          },
-        });
-
-        this.client = transporter;
-      })
-      .catch((err) => console.log(err));
+    this.client = nodemailer.createTransport({
+      SES: new SES({
+        apiVersion: "2010-12-01",
+        region: process.env.AWS_REGION,
+      }),
+    });
   }
 
   async sendMail(
@@ -45,7 +33,7 @@ class EtherealMailProvider implements IMailProvider {
 
     const message = {
       to,
-      from: "Rentx <noreplay@rentx.com.br>",
+      from: "Rentx <tales.monteiro@tmrentx.com>",
       subject,
       html: templateHTML,
     };
@@ -54,14 +42,11 @@ class EtherealMailProvider implements IMailProvider {
     this.client.sendMail(message, (err, info) => {
       if (err) {
         console.log(`Error occurred. ${err.message}`);
+        // eslint-disable-next-line no-useless-return
         return null /* process.exit(1) */;
       }
-
-      console.log("Message sent: %s", info.messageId);
-      // Preview only available when sending through an Ethereal account
-      console.log("Preview URL: %s", nodemailer.getTestMessageUrl(info));
     });
   }
 }
 
-export { EtherealMailProvider };
+export { SESMailProvider };
