@@ -1,6 +1,6 @@
 import { Specification } from "../infra/typeorm/entities/Specification";
 
-class ICreateCarDTO {
+interface ICreateCarDTO {
   name: string;
   description: string;
   daily_rate: number;

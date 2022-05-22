@@ -146,9 +146,13 @@ dist
 docker-compose.yml
 
 #tmp
-tmp
+tmp/*
 
 #auth
 src\config\auth.ts
 
 # End of https://www.toptal.com/developers/gitignore/api/node
+
+!tmp/.gitkeep
+
+ormconfig.json
