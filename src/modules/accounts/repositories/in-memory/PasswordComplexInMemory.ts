@@ -1,6 +1,6 @@
-import { IPasswordComplexDTO } from "../../dtos/ICreatePasswordComplexDTO";
-import { PasswordComplex } from "../../infra/typeorm/entities/PasswordComplex";
-import { IPasswordComplexRepository } from "../IPasswordComplexRespository";
+import { IPasswordComplexDTO } from "@modules/accounts/dtos/ICreatePasswordComplexDTO";
+import { PasswordComplex } from "@modules/accounts/infra/typeorm/entities/PasswordComplex";
+import { IPasswordComplexRepository } from "@modules/accounts/repositories/IPasswordComplexRespository";
 
 class PasswordComplexInMemory implements IPasswordComplexRepository {
   passwordComplexities: PasswordComplex[] = [];

@@ -1,5 +1,6 @@
-import { ICreateUserTokensDTO } from "../../dtos/ICreateUserTokensDTO";
-import { UserTokens } from "../../infra/typeorm/entities/UserTokens";
+import { ICreateUserTokensDTO } from "@modules/accounts/dtos/ICreateUserTokensDTO";
+import { UserTokens } from "@modules/accounts/infra/typeorm/entities/UserTokens";
+
 import { IUsersTokensRepository } from "../IUsersTokensRepository";
 
 class UsersTokensRepositoryInMemory implements IUsersTokensRepository {

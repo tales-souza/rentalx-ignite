@@ -1,8 +1,8 @@
 import { getRepository, Repository } from "typeorm";
 
-import { IPasswordComplexDTO } from "../../../dtos/ICreatePasswordComplexDTO";
-import { IPasswordComplexRepository } from "../../../repositories/IPasswordComplexRespository";
-import { PasswordComplex } from "../entities/PasswordComplex";
+import { IPasswordComplexDTO } from "@modules/accounts/dtos//ICreatePasswordComplexDTO";
+import { PasswordComplex } from "@modules/accounts/infra/typeorm/entities/PasswordComplex";
+import { IPasswordComplexRepository } from "@modules/accounts/repositories/IPasswordComplexRespository";
 
 class PasswordComplexRepository implements IPasswordComplexRepository {
   private repository: Repository<PasswordComplex>;
