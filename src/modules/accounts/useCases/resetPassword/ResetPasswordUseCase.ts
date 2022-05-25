@@ -1,12 +1,12 @@
 import { hash } from "bcryptjs";
 import { inject, injectable } from "tsyringe";
 
-import { IDateProvider } from "../../../../shared/container/providers/DateProvider/IDateProvider";
-import { AppError } from "../../../../shared/errors/AppError";
-import { passwordComplexFnc } from "../../../../utils/passwordComplexFnc";
-import { IPasswordComplexRepository } from "../../repositories/IPasswordComplexRespository";
-import { IUsersRepository } from "../../repositories/IUsersRepository";
-import { IUsersTokensRepository } from "../../repositories/IUsersTokensRepository";
+import { IPasswordComplexRepository } from "@modules/accounts/repositories/IPasswordComplexRespository";
+import { IUsersRepository } from "@modules/accounts/repositories/IUsersRepository";
+import { IUsersTokensRepository } from "@modules/accounts/repositories/IUsersTokensRepository";
+import { IDateProvider } from "@shared/container/providers/DateProvider/IDateProvider";
+import { AppError } from "@shared/errors/AppError";
+import { passwordComplexFnc } from "@utils/passwordComplexFnc";
 
 interface IRequest {
   token: string;

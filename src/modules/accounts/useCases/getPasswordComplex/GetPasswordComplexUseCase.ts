@@ -1,7 +1,7 @@
 import { inject, injectable } from "tsyringe";
 
-import { PasswordComplex } from "../../infra/typeorm/entities/PasswordComplex";
-import { IPasswordComplexRepository } from "../../repositories/IPasswordComplexRespository";
+import { PasswordComplex } from "@modules/accounts/infra/typeorm/entities/PasswordComplex";
+import { IPasswordComplexRepository } from "@modules/accounts/repositories/IPasswordComplexRespository";
 
 @injectable()
 class GetPasswordComplexUseCase {

@@ -1,11 +1,11 @@
 import { hash } from "bcryptjs";
 import { inject, injectable } from "tsyringe";
 
-import { AppError } from "../../../../shared/errors/AppError";
-import { passwordComplexFnc } from "../../../../utils/passwordComplexFnc";
-import { ICreateUserDTO } from "../../dtos/ICreateUserDTO";
-import { IPasswordComplexRepository } from "../../repositories/IPasswordComplexRespository";
-import { IUsersRepository } from "../../repositories/IUsersRepository";
+import { ICreateUserDTO } from "@modules/accounts/dtos/ICreateUserDTO";
+import { IPasswordComplexRepository } from "@modules/accounts/repositories/IPasswordComplexRespository";
+import { IUsersRepository } from "@modules/accounts/repositories/IUsersRepository";
+import { AppError } from "@shared/errors/AppError";
+import { passwordComplexFnc } from "@utils/passwordComplexFnc";
 
 @injectable()
 class CreateUserUseCase {

@@ -1,8 +1,8 @@
 import { injectable, inject } from "tsyringe";
 
-import { User } from "../../infra/typeorm/entities/User";
-import { UserMap } from "../../mapper/UserMap";
-import { IUsersRepository } from "../../repositories/IUsersRepository";
+import { User } from "@modules/accounts/infra/typeorm/entities/User";
+import { UserMap } from "@modules/accounts/mapper/UserMap";
+import { IUsersRepository } from "@modules/accounts/repositories/IUsersRepository";
 
 @injectable()
 class ProfileUserUseCase {

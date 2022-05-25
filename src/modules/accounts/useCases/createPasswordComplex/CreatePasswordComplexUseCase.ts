@@ -1,7 +1,8 @@
 import { inject, injectable } from "tsyringe";
 
-import { IPasswordComplexDTO } from "../../dtos/ICreatePasswordComplexDTO";
-import { PasswordComplex } from "../../infra/typeorm/entities/PasswordComplex";
+import { IPasswordComplexDTO } from "@modules/accounts/dtos/ICreatePasswordComplexDTO";
+import { PasswordComplex } from "@modules/accounts/infra/typeorm/entities/PasswordComplex";
+
 import { IPasswordComplexRepository } from "../../repositories/IPasswordComplexRespository";
 
 @injectable()
