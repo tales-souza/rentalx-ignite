@@ -5,5 +5,4 @@ declare namespace Express {
       id: string;
     };
   }
-  // eslint-disable-next-line prettier/prettier
-};
+}

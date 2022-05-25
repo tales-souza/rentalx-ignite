@@ -1,0 +1,73 @@
+"use strict";
+
+var _AppError = require("../../../../shared/errors/AppError");
+
+var _CarsRepositoryInMemory = require("../../repositories/in-memory/CarsRepositoryInMemory");
+
+var _CreateCarUseCase = require("./CreateCarUseCase");
+
+let carsRepositoryInMemory;
+let createCarUseCase;
+describe("Create Car", () => {
+  beforeEach(() => {
+    carsRepositoryInMemory = new _CarsRepositoryInMemory.CarsRepositoryInMemory();
+    createCarUseCase = new _CreateCarUseCase.CreateCarUseCase(carsRepositoryInMemory);
+  });
+  it("shold be able to create a new car", async () => {
+    await createCarUseCase.execute({
+      name: "Car name",
+      description: "Car Description",
+      daily_rate: 1,
+      license_plate: "Car License plate",
+      fine_amount: 1,
+      brand: "Car brand",
+      category_id: "60567651-b3c9-4672-ada4-01d83ff9e88a"
+    });
+  });
+  it("shold not be able to create a car with exists licence plate", async () => {
+    await createCarUseCase.execute({
+      name: "Car name",
+      description: "Car Description",
+      daily_rate: 1,
+      license_plate: "UAB-2540",
+      fine_amount: 1,
+      brand: "Car brand",
+      category_id: "60567651-b3c9-4672-ada4-01d83ff9e88a"
+    });
+    await expect(createCarUseCase.execute({
+      name: "Car name 2 ",
+      description: "Car Description 2 ",
+      daily_rate: 2,
+      license_plate: "UAB-2540",
+      fine_amount: 2,
+      brand: "Car brand 2",
+      category_id: "60567651-b3c9-4672-ada4-01d83ff9e88a"
+    })).rejects.toEqual(new _AppError.AppError("Car already exists!", 400));
+  });
+  it("should not be able to create a car a with available true by default", async () => {
+    const car = {
+      name: "Car available",
+      description: "Car Description 2 ",
+      daily_rate: 2,
+      license_plate: "UABD-2540",
+      fine_amount: 2,
+      brand: "Car brand 2",
+      category_id: "60567651-b3c9-4672-ada4-01d83ff9e88a"
+    };
+    await createCarUseCase.execute(car);
+    const carAvailable = await carsRepositoryInMemory.findByLicencePlate(car.license_plate);
+    expect(carAvailable.available).toBe(true);
+  });
+  it("should not be able to create a car a with non-existent category", async () => {
+    const car = {
+      name: "Car available",
+      description: "Car Description 2 ",
+      daily_rate: 2,
+      license_plate: "UABD-2540",
+      fine_amount: 2,
+      brand: "Car brand 2",
+      category_id: "d3a20ce1-e8e5-475f-aa57-9f5852789800"
+    };
+    await expect(createCarUseCase.execute(car)).rejects.toEqual(new _AppError.AppError("Non-existent reported category"));
+  });
+});
