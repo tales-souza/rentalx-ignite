@@ -5,6 +5,8 @@ import cors from "cors";
 
 import "dotenv/config";
 import "reflect-metadata";
+import raterLimiter from "@shared/infra/http/middlewares/raterLimiter";
+
 import swaggerFile from "../../../swagger.json";
 import "../../container";
 import { AppError } from "../../errors/AppError";
@@ -16,6 +18,7 @@ createConnection("localhost");
 const app = express();
 
 app.use(cors());
+app.use(raterLimiter);
 app.use(express.json());
 
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerFile));
