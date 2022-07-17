@@ -16,7 +16,10 @@ class CreateUserController {
       driver_license,
     });
 
-    return response.status(201).send();
+    return response.status(201).json({
+      message:
+        "Your account has been successfully registered, in a few moments you will receive an email with instructions to activate it.",
+    });
   }
 }
 

@@ -44,6 +44,11 @@ export class CreateUsers1643888123870 implements MigrationInterface {
             type: "timestamp",
             default: "now()",
           },
+          {
+            name: "isActive",
+            type: "boolean",
+            default: false,
+          },
         ],
       })
     );

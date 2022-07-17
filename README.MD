@@ -79,3 +79,9 @@ O Usuário deve estar logado na aplicação
 **RN**
 - O usuário precisa informar uma nova senha
 - o link enviado para a recuperação deve expirar em 3 horas
+
+
+# Login de usuário
+
+**RN**
+- O Usuário só pode logar no sistema caso o mesmo já tenho confirmado sua conta por email

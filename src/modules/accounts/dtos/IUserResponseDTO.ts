@@ -4,6 +4,7 @@ interface IUserResponseDTO {
   id: string;
   avatar: string;
   driver_license: string;
+  is_active: boolean;
 
   avatar_url(): string;
 }

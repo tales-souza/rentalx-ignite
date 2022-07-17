@@ -1,6 +1,8 @@
 import { Router } from "express";
 import multer from "multer";
 
+import { ActiveAccountController } from "@modules/accounts/useCases/activeAccount/ActiveAccountController";
+
 import uploadConfig from "../../../../config/upload";
 import { CreatePasswordComplexController } from "../../../../modules/accounts/useCases/createPasswordComplex/CreatePasswordComplexController";
 import { CreateUserController } from "../../../../modules/accounts/useCases/createUser/CreateUserController";
@@ -19,6 +21,7 @@ const updateUseAvatarController = new UpdateUseAvatarController();
 const profileUserController = new ProfileUserController();
 const createPasswordComplexController = new CreatePasswordComplexController();
 const getPasswordComplexController = new GetPasswordComplexController();
+const activeAccountController = new ActiveAccountController();
 
 usersRoutes.post("/", createUserController.handle);
 
@@ -44,5 +47,7 @@ usersRoutes.get(
   ensureAdmin,
   getPasswordComplexController.handle
 );
+
+usersRoutes.get("/activeAccount", activeAccountController.handle);
 
 export { usersRoutes };
