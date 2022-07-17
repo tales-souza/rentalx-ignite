@@ -5,11 +5,13 @@ import { UsersTokensRepositoryInMemory } from "@modules/accounts/repositories/in
 import { AuthenticateUserUseCase } from "@modules/accounts/useCases/authenticateUser/AuthenticateUserUseCase";
 import { CreateUserUseCase } from "@modules/accounts/useCases/createUser/CreateUserUseCase";
 import { DayJsDateProvider } from "@shared/container/providers/DateProvider/implementations/DayJsDateProvider";
+import { MailProviderInMemory } from "@shared/container/providers/MailProvider/in-memory/MailProviderInMemory";
 import { AppError } from "@shared/errors/AppError";
 
 let usersRepositoryInMemory: UsersRepositoryInMemory;
 let usersTokensRepositoryInMemory: UsersTokensRepositoryInMemory;
 let passwordComplexRepository: PasswordComplexInMemory;
+let iMailProvider: MailProviderInMemory;
 
 let authenticateUserUseCase: AuthenticateUserUseCase;
 let createUserUseCase: CreateUserUseCase;
@@ -20,6 +22,7 @@ describe("Authenticate User", () => {
     usersRepositoryInMemory = new UsersRepositoryInMemory();
     usersTokensRepositoryInMemory = new UsersTokensRepositoryInMemory();
     dateProvider = new DayJsDateProvider();
+    iMailProvider = new MailProviderInMemory();
 
     authenticateUserUseCase = new AuthenticateUserUseCase(
       usersRepositoryInMemory,
@@ -38,7 +41,10 @@ describe("Authenticate User", () => {
 
     createUserUseCase = new CreateUserUseCase(
       usersRepositoryInMemory,
-      passwordComplexRepository
+      passwordComplexRepository,
+      iMailProvider,
+      usersTokensRepositoryInMemory,
+      dateProvider
     );
   });
 
@@ -51,6 +57,10 @@ describe("Authenticate User", () => {
     };
 
     await createUserUseCase.execute(user);
+
+    const activatedUser = await usersRepositoryInMemory.findByEmail(user.email);
+    activatedUser.is_active = true;
+    await usersRepositoryInMemory.create(activatedUser);
 
     const result = await authenticateUserUseCase.execute({
       email: user.email,
@@ -78,11 +88,37 @@ describe("Authenticate User", () => {
     };
 
     await createUserUseCase.execute(user);
+    const activatedUser = await usersRepositoryInMemory.findByEmail(user.email);
+    activatedUser.is_active = true;
+    await usersRepositoryInMemory.create(activatedUser);
+
     await expect(
       authenticateUserUseCase.execute({
         email: user.email,
         password: "12345",
       })
     ).rejects.toEqual(new AppError("Email or Password incorrect", 401));
+  });
+
+  it("shold not be able to authenticate with account disabled", async () => {
+    const user: ICreateUserDTO = {
+      driver_license: "00123",
+      email: "teste@testeme.com",
+      password: "1234",
+      name: "User Test",
+    };
+    await createUserUseCase.execute(user);
+
+    await expect(
+      authenticateUserUseCase.execute({
+        email: user.email,
+        password: user.password,
+      })
+    ).rejects.toEqual(
+      new AppError(
+        "Your account has not yet been activated, please check your email inbox.",
+        401
+      )
+    );
   });
 });

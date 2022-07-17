@@ -43,6 +43,15 @@ class AuthenticateUserUseCase {
       throw new AppError("Email or Password incorrect", 401);
     }
 
+    /* Conta não ativada */
+
+    if (!user.is_active) {
+      throw new AppError(
+        "Your account has not yet been activated, please check your email inbox.",
+        401
+      );
+    }
+
     const passwordMatch = await compare(password, user.password);
 
     if (!passwordMatch) {

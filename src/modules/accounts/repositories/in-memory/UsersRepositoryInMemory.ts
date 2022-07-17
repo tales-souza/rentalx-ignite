@@ -5,12 +5,14 @@ import { IUsersRepository } from "@modules/accounts/repositories/IUsersRepositor
 class UsersRepositoryInMemory implements IUsersRepository {
   users: User[] = [];
 
-  async create(data: ICreateUserDTO): Promise<void> {
+  async create(data: ICreateUserDTO): Promise<User> {
     const user = new User();
 
     Object.assign(user, data);
 
     this.users.push(user);
+
+    return user;
   }
 
   async findByEmail(email: string): Promise<User> {
