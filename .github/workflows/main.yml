@@ -40,6 +40,11 @@ jobs:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v3
 
+      - name: Connect to PostgreSQL
+        # Runs a script that creates a PostgreSQL table, populates
+        # the table with data, and then retrieves the data
+        run: psql -U postgres -tc "SELECT 1 FROM pg_database WHERE datname = 'rentx_test'" | grep -q 1 | psql -U postgres -c "CREATE DATABASE rentx_test"
+
       - name: Setup Nodeks
         uses: actions/setup-node@v2
         with:
@@ -62,11 +67,6 @@ jobs:
           source: "., !node_modules"
           target: "~/app/rentalx-ignite"
 
-      - name: Connect to PostgreSQL
-        # Runs a script that creates a PostgreSQL table, populates
-        # the table with data, and then retrieves the data
-        run: psql -U postgres -tc "SELECT 1 FROM pg_database WHERE datname = 'rentx_test'" | grep -q 1 | psql -U postgres -c "CREATE DATABASE rentx_test"
-        
       - name: Update API
         uses: appleboy/ssh-action@master
         with:
@@ -80,7 +80,6 @@ jobs:
             ./node_modules/.bin/typeorm migration:run
             pm2 restart rentx_api
 
-
         # Environment variables used by the `client.js` script to create
         # a new PostgreSQL table.
         env:
@@ -88,7 +87,3 @@ jobs:
           POSTGRES_HOST: localhost
           # The default PostgreSQL port
           POSTGRES_PORT: 5432
-
-
-
-psql -U postgres -tc "SELECT 1 FROM pg_database WHERE datname = '<your db name>'" | grep -q 1 | psql -U postgres -c "CREATE DATABASE <your db name>"
