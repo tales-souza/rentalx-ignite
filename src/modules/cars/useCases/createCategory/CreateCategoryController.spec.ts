@@ -10,6 +10,7 @@ let connection: Connection;
 describe("Create Category Controller", () => {
   beforeAll(async () => {
     connection = await createConnection();
+
     await connection.runMigrations();
 
     const id = uuidv4();
@@ -17,8 +18,8 @@ describe("Create Category Controller", () => {
     const password = await hash("admin", 8);
 
     await connection.query(`
-      INSERT INTO USERS(id, name, email, password, "isAdmin", created_at, driver_license )
-         values('${id}', 'admin', 'admin@rentx.com.br', '${password}', true, 'now()', 'XXXXXXXX')
+      INSERT INTO USERS(id, name, email, password, "isAdmin", created_at, driver_license, is_active )
+         values('${id}', 'admin', 'admin@rentx.com.br', '${password}', true, 'now()', 'XXXXXXXX', true)
       `);
   });
 

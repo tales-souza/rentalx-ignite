@@ -6,57 +6,89 @@ name: CI
 on:
   # Triggers the workflow on push or pull request events but only for the main branch
   push:
-    branches: [ main ]
-  
+    branches: [main]
+
   pull_request:
-    branches: [ main ]
-    
+    branches: [main]
+
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
 jobs:
   build:
     runs-on: ubuntu-latest
+
+    services:
+      # Label used to access the service container
+      postgres:
+        # Docker Hub image
+        image: postgres
+        # Provide the password for postgres
+        env:
+          POSTGRES_PASSWORD: postgres
+        # Set health checks to wait until postgres has started
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          # Maps tcp port 5432 on service container to the host
+          - 5432:5432
+
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v3
-      
+
       - name: Setup Nodeks
         uses: actions/setup-node@v2
         with:
           node-version: 16.x
       - name: Install Dependencies
         run: yarn --frozen-lockfile
-        
+
       - name: Run all tests
         run: yarn test
-      
+
       - name: Build
         run: yarn build
 
+      - uses: appleboy/scp-action@master
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          port: ${{ secrets.SSH_PORT }}
+          key: ${{ secrets.SSH_KEY }}
+          source: "., !node_modules"
+          target: "~/app/rentalx-ignite"
+
+      - name: Connect to PostgreSQL
+        # Runs a script that creates a PostgreSQL table, populates
+        # the table with data, and then retrieves the data
+        run: psql -U postgres -tc "SELECT 1 FROM pg_database WHERE datname = 'rentx_test'" | grep -q 1 | psql -U postgres -c "CREATE DATABASE rentx_test"
         
-      -  uses: appleboy/scp-action@master
-         with:
-           host: ${{ secrets.SSH_HOST }}
-           username: ${{ secrets.SSH_USER }}
-           port: ${{ secrets.SSH_PORT }}
-           key: ${{ secrets.SSH_KEY }}
-           source: "., !node_modules"
-           target: "~/app/rentalx-ignite"
-       
       - name: Update API
         uses: appleboy/ssh-action@master
         with:
-           host: ${{ secrets.SSH_HOST }}
-           username: ${{ secrets.SSH_USER }}
-           port: ${{ secrets.SSH_PORT }}
-           key: ${{ secrets.SSH_KEY }}
-           script: | 
-             cd ~/app/rentalx-ignite
-             yarn
-             ./node_modules/.bin/typeorm migration:run
-             pm2 restart rentx_api
-             
-      
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          port: ${{ secrets.SSH_PORT }}
+          key: ${{ secrets.SSH_KEY }}
+          script: |
+            cd ~/app/rentalx-ignite
+            yarn
+            ./node_modules/.bin/typeorm migration:run
+            pm2 restart rentx_api
 
-     
+
+        # Environment variables used by the `client.js` script to create
+        # a new PostgreSQL table.
+        env:
+          # The hostname used to communicate with the PostgreSQL service container
+          POSTGRES_HOST: localhost
+          # The default PostgreSQL port
+          POSTGRES_PORT: 5432
+
+
+
+psql -U postgres -tc "SELECT 1 FROM pg_database WHERE datname = '<your db name>'" | grep -q 1 | psql -U postgres -c "CREATE DATABASE <your db name>"
