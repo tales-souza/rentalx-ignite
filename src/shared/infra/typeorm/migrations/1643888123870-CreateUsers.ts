@@ -45,7 +45,7 @@ export class CreateUsers1643888123870 implements MigrationInterface {
             default: "now()",
           },
           {
-            name: "isActive",
+            name: "is_active",
             type: "boolean",
             default: false,
           },
