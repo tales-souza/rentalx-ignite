@@ -43,11 +43,6 @@ jobs:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v3
 
-      - name: Connect to PostgreSQL
-        # Runs a script that creates a PostgreSQL table, populates
-        # the table with data, and then retrieves the data
-        run: psql -U postgres -tc "SELECT 1 FROM pg_database WHERE datname = 'rentx_test'" | grep -q 1 | psql -U postgres -c "CREATE DATABASE rentx_test" postgresql://postgres:postgres@localhost:5432/postgres
-
       - name: Setup Nodeks
         uses: actions/setup-node@v2
         with:
