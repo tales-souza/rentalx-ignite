@@ -27,7 +27,7 @@ jobs:
         env:
           POSTGRES_PASSWORD: docker
           POSTGRES_USER: ignite
-          POSTGRES_DB: 'rentx_test'
+          POSTGRES_DB: rentx_test
 
         # Set health checks to wait until postgres has started
         options: >-
@@ -90,3 +90,5 @@ jobs:
           POSTGRES_HOST: localhost
           # The default PostgreSQL port
           POSTGRES_PORT: 5432
+          
+  
